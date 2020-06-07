@@ -33,12 +33,24 @@ public interface NetService {
     @POST
     Observable<String> post(@Url String url, @FieldMap WeakHashMap<String, Object> params);
 
-    //下载
+    /**
+     * 下载
+     *
+     * @param url
+     * @param params
+     * @return
+     */
     @Streaming
     @GET
     Observable<ResponseBody> download(@Url String url, @QueryMap Map<String, Object> params);
 
-    //上传
+    /**
+     * 上传
+     *
+     * @param url
+     * @param file
+     * @return
+     */
     @Multipart
     @POST
     Observable<String> upload(@Url String url, @Part MultipartBody.Part file);

@@ -33,7 +33,7 @@ public class NetCreator {
 
     }
 
-    public static final class NetServiceHolder {
+    private static final class NetServiceHolder {
         private static final NetService NET_SERVICE = RetrofitHolder.RETROFIT_CLIENT.create(NetService.class);
     }
 
