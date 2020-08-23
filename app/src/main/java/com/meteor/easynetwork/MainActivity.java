@@ -1,49 +1,49 @@
 package com.meteor.easynetwork;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 
-import com.meteor.network.NetCreator;
-import com.meteor.network.base.BaseObserver;
 
-import java.util.WeakHashMap;
+import com.meteor.easynetwork.ui.adapter.MainVpAdapter;
+import com.meteor.easynetwork.ui.fragment.BaseRequestFragment;
+import com.meteor.easynetwork.ui.fragment.FileDownloadFragment;
+import com.meteor.easynetwork.ui.fragment.FileUploadFragment;
 
-import rx.Observable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView tvResult;
+    protected TabLayout tlMain;
+    protected ViewPager vpMain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        tvResult = findViewById(R.id.tv_result);
-        findViewById(R.id.btn_get).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final WeakHashMap map = new WeakHashMap();
-                map.put("name", "12346");
-                NetApi.getInstance().post("TestHandler", map, new BaseObserver() {
-                    @Override
-                    public void onSuccess(String data) {
-                        Log.e("gll", data);
-                        tvResult.setText(data);
-
-                    }
-
-                    @Override
-                    public void onError(String msg) {
-                        Log.e("gll", msg);
-                        tvResult.setText(msg + "");
-                    }
-                });
-
-            }
-        });
+        super.setContentView(R.layout.activity_main);
+        initView();
     }
+
+    private void initView() {
+        tlMain = (TabLayout) findViewById(R.id.tl_main);
+        vpMain = (ViewPager) findViewById(R.id.vp_main);
+
+        List<Fragment> fragmentList = new ArrayList<>();
+        fragmentList.add(BaseRequestFragment.newInstance());
+        fragmentList.add(FileUploadFragment.newInstance());
+        fragmentList.add(FileDownloadFragment.newInstance());
+        String[] titles = {"基本请求", "文件上传", "文件下载"};
+        MainVpAdapter adapter = new MainVpAdapter(getSupportFragmentManager(), fragmentList, titles);
+        vpMain.setAdapter(adapter);
+//        vpReportIncomeSetting.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tlReportIncomeSetting));
+
+        tlMain.setupWithViewPager(vpMain);
+        tlMain.setTabMode(TabLayout.MODE_SCROLLABLE);
+        tlMain.setTabTextColors(getResources().getColor(R.color.colorAccent), getResources().getColor(R.color.colorAccent));
+        tlMain.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorAccent));
+    }
+
 }

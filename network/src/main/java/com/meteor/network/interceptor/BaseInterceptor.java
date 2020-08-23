@@ -1,9 +1,8 @@
 package com.meteor.network.interceptor;
 
 
-import com.meteor.network.base.BaseParams;
-
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 import okhttp3.FormBody;
@@ -23,6 +22,12 @@ public class BaseInterceptor implements Interceptor {
     //声明响应对象
     private Response response;
 
+    private HashMap<String, String> params = new HashMap<>();
+
+    public BaseInterceptor(HashMap<String, String> params) {
+        this.params = params;
+    }
+
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request baseRequest = chain.request();
@@ -31,7 +36,7 @@ public class BaseInterceptor implements Interceptor {
         String method = baseRequest.method();
         if ("GET".equalsIgnoreCase(method)) {
             HttpUrl.Builder builder = baseRequest.url().newBuilder();
-            for (Map.Entry<String, String> parameter : BaseParams.basicsParams().entrySet()) {
+            for (Map.Entry<String, String> parameter : params.entrySet()) {
                 builder.addQueryParameter(parameter.getKey(), parameter.getValue());
             }
 
@@ -48,7 +53,7 @@ public class BaseInterceptor implements Interceptor {
                 for (int i = 0; i < originalFormBody.size(); i++) {
                     builder.add(originalFormBody.name(i), originalFormBody.value(i));
                 }
-                for (Map.Entry<String, String> parameter : BaseParams.basicsParams().entrySet()) {
+                for (Map.Entry<String, String> parameter : params.entrySet()) {
                     builder.add(parameter.getKey(), parameter.getValue());
                 }
                 FormBody formBody = builder.build();
