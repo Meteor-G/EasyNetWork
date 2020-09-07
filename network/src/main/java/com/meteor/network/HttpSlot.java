@@ -163,6 +163,7 @@ public class HttpSlot {
         public Builder() {
         }
 
+
         public HttpSlot.Builder setBaseUrl(String mBaseUrl) {
             this.mBaseUrl = mBaseUrl;
             return this;

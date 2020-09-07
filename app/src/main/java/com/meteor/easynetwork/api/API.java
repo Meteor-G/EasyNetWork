@@ -22,26 +22,26 @@ public class API {
     public static void testGet(HttpCallback callback) {
         HashMap<String, String> headers = new HashMap<>();
         headers.put("aaa", "adafd");
-        HttpManager.get(UrlConfig.USER_INFO, null, callback);
+        HttpManager.getInstance().get(UrlConfig.USER_INFO, null, callback);
     }
 
     public static void testPost(String name, String password, HttpCallback callback) {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("name", name);
         parameters.put("password", password);
-        HttpManager.post(UrlConfig.USER_LOGIN, parameters, callback);
+        HttpManager.getInstance().post(UrlConfig.USER_LOGIN, parameters, callback);
     }
 
     public static void testPost(UserForLogin userForLogin, HttpCallback callback) {
-        HttpManager.postByBody(UrlConfig.USER_LOGIN_BY_BODY, userForLogin, callback);
+        HttpManager.getInstance().postByBody(UrlConfig.USER_LOGIN_BY_BODY, userForLogin, callback);
     }
 
     public static void testSingleFileUpload(String url, String filePath, String fileDes, FileResponseResult fileResponseResult) {
-        HttpManager.uploadFile(url, filePath, fileDes, true, fileResponseResult);
+        HttpManager.getInstance().uploadFile(url, filePath, fileDes, true, fileResponseResult);
     }
 
     public static void testMultipleFileUpload(String url, List<String> filePathList, FileResponseResult fileResponseResult) {
-        HttpManager.uploadFiles(url, filePathList, true, fileResponseResult);
+        HttpManager.getInstance().uploadFiles(url, filePathList, true, fileResponseResult);
     }
 
     /**
@@ -63,6 +63,6 @@ public class API {
         if (!TextUtils.isEmpty(city)) {
             parameters.put("city", city);
         }
-        HttpManager.getFullPath(UrlConfig.DOUBAN_MOVIE_IN_THEATERS, parameters, callback);
+        HttpManager.getInstance().getFullPath(UrlConfig.DOUBAN_MOVIE_IN_THEATERS, parameters, callback);
     }
 }

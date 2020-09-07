@@ -64,7 +64,6 @@ public final class HttpManager {
         retrofitBuilder.addCallAdapterFactory(RxJavaCallAdapterFactory.create());//增加RxJava2CallAdapterFactory
         retrofitBuilder.addConverterFactory(ScalarsConverterFactory.create());//坑   addConverterFactory有先后顺序之分,如果想获取到String,这个必须写前边
         retrofitBuilder.addConverterFactory(GsonConverterFactory.create()); // 添加Gson转换器
-
     }
 
     public static void init(Context context, HttpSlot httpSlot) {
@@ -77,12 +76,12 @@ public final class HttpManager {
     /**
      * 获取全局上下文
      */
-    public static Context getContext() {
+    public Context getContext() {
         testInitialize();
         return mContext;
     }
 
-    private static void testInitialize() {
+    private void testInitialize() {
         if (mContext == null)
             throw new ExceptionInInitializerError("请先在全局Application中调用 EasyHttp.init() 初始化！");
     }
@@ -117,32 +116,32 @@ public final class HttpManager {
         }
     }
 
-    public static CommonRequest getDefultCommonApi() {
+    public CommonRequest getDefultCommonApi() {
         return getInstance().mDefultCommonRequest;
     }
 
     /**
      * 对外暴露 OkHttpClient,方便自定义
      */
-    public static OkHttpClient.Builder getOkHttpClientBuilder() {
+    public OkHttpClient.Builder getOkHttpClientBuilder() {
         return getInstance().okHttpClientBuilder;
     }
 
     /**
      * 对外暴露 Retrofit,方便自定义
      */
-    public static Retrofit.Builder getRetrofitBuilder() {
+    public Retrofit.Builder getRetrofitBuilder() {
         return getInstance().retrofitBuilder;
     }
 
-    public static OkHttpClient getOkHttpClient() {
+    public OkHttpClient getOkHttpClient() {
         return getInstance().okHttpClientBuilder.build();
     }
 
     /**
      * 根据当前的请求参数，生成对应的OkClient
      */
-    private static OkHttpClient.Builder generateOkClient(HttpSlot httpSlot) {
+    private OkHttpClient.Builder generateOkClient(HttpSlot httpSlot) {
         long readTimeOut = httpSlot.getReadTimeOut();
         long writeTimeOut = httpSlot.getReadTimeOut();
         long connectTimeout = httpSlot.getConnectTimeout();
@@ -187,7 +186,7 @@ public final class HttpManager {
     /**
      * 根据当前的请求参数，生成对应的Retrofit
      */
-    private static Retrofit.Builder generateRetrofit(HttpSlot httpSlot) {
+    private Retrofit.Builder generateRetrofit(HttpSlot httpSlot) {
         List<CallAdapter.Factory> adapterFactories = httpSlot.getCallAdapterFactory();
         List<Converter.Factory> converterFactories = httpSlot.getConverterFactories();
         String baseUrl = httpSlot.getBaseUrl();
@@ -227,7 +226,7 @@ public final class HttpManager {
         }
     }
 
-    private static CommonRequest getApi(HttpSlot httpSlot) {
+    private CommonRequest getApi(HttpSlot httpSlot) {
         OkHttpClient.Builder okHttpClientBuilder;
         Retrofit.Builder retrofitBuilder;
         if (httpSlot == null) {
@@ -244,7 +243,7 @@ public final class HttpManager {
         return retrofit.create(CommonRequest.class);
     }
 
-    private static CommonRequest getDefultApi() {
+    private CommonRequest getDefultApi() {
         OkHttpClient.Builder okHttpClientBuilder = getOkHttpClientBuilder();
         Retrofit.Builder retrofitBuilder = getRetrofitBuilder();
         OkHttpClient okHttpClient = okHttpClientBuilder.build();
@@ -262,11 +261,11 @@ public final class HttpManager {
      * @param callback
      */
 
-    public static void get(String url, Map<String, Object> parameters, HttpCallback callback) {
+    public void get(String url, Map<String, Object> parameters, HttpCallback callback) {
         get(null, url, parameters, callback);
     }
 
-    public static void get(HttpSlot httpSlot, String url, Map<String, Object> parameters, HttpCallback callback) {
+    public void get(HttpSlot httpSlot, String url, Map<String, Object> parameters, HttpCallback callback) {
         if (parameters == null || parameters.size() == 0) {
             getApi(httpSlot)
                     .doGet(url)
@@ -288,11 +287,11 @@ public final class HttpManager {
      * @param parameters
      * @return
      */
-    public static Observable get(String url, Map<String, Object> parameters) {
+    public Observable get(String url, Map<String, Object> parameters) {
         return get(null, url, parameters);
     }
 
-    public static Observable get(HttpSlot httpSlot, String url, Map<String, Object> parameters) {
+    public Observable get(HttpSlot httpSlot, String url, Map<String, Object> parameters) {
 
         if (parameters == null || parameters.size() == 0) {
             return getApi(httpSlot)
@@ -312,11 +311,11 @@ public final class HttpManager {
      * @param parameters
      * @param callback
      */
-    public static void getFullPath(String fullUrl, Map<String, Object> parameters, HttpCallback callback) {
+    public void getFullPath(String fullUrl, Map<String, Object> parameters, HttpCallback callback) {
         getFullPath(null, fullUrl, parameters, callback);
     }
 
-    public static void getFullPath(HttpSlot httpSlot, String fullUrl, Map<String, Object> parameters, HttpCallback callback) {
+    public void getFullPath(HttpSlot httpSlot, String fullUrl, Map<String, Object> parameters, HttpCallback callback) {
         if (parameters == null || parameters.size() == 0) {
             getApi(httpSlot)
                     .doGetFullPath(fullUrl)
@@ -341,11 +340,11 @@ public final class HttpManager {
      * @param callback
      * @param <T>
      */
-    public static <T> void postByBody(String url, T t, HttpCallback callback) {
+    public <T> void postByBody(String url, T t, HttpCallback callback) {
         postByBody(null, url, t, callback);
     }
 
-    public static <T> void postByBody(HttpSlot httpSlot, String url, T t, HttpCallback callback) {
+    public <T> void postByBody(HttpSlot httpSlot, String url, T t, HttpCallback callback) {
         String parameters = new Gson().toJson(t);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), parameters);
         getApi(httpSlot)
@@ -361,32 +360,32 @@ public final class HttpManager {
      * @param parameters
      * @return
      */
-    public static Observable post(String url, Map<String, Object> parameters) {
+    public Observable post(String url, Map<String, Object> parameters) {
         return post(null, url, parameters);
     }
 
-    public static Observable post(HttpSlot httpSlot, String url, Map<String, Object> parameters) {
+    public Observable post(HttpSlot httpSlot, String url, Map<String, Object> parameters) {
         return getApi(httpSlot)
                 .doPost(url, parameters)
                 .compose(schedulerTransformer);
     }
 
-    public static void post(String url, Map<String, Object> parameters, HttpCallback callback) {
+    public void post(String url, Map<String, Object> parameters, HttpCallback callback) {
         post(null, url, parameters, callback);
     }
 
-    public static void post(HttpSlot httpSlot, String url, Map<String, Object> parameters, HttpCallback callback) {
+    public void post(HttpSlot httpSlot, String url, Map<String, Object> parameters, HttpCallback callback) {
         getApi(httpSlot)
                 .doPost(url, parameters)
                 .compose(schedulerTransformer)
                 .subscribe(new CommonResultSubscriber(callback));
     }
 
-    public static void postFullPath(String fullUrl, Map<String, Object> parameters, HttpCallback callback) {
+    public void postFullPath(String fullUrl, Map<String, Object> parameters, HttpCallback callback) {
         postFullPath(null, fullUrl, parameters, callback);
     }
 
-    public static void postFullPath(HttpSlot httpSlot, String fullUrl, Map<String, Object> parameters, HttpCallback callback) {
+    public void postFullPath(HttpSlot httpSlot, String fullUrl, Map<String, Object> parameters, HttpCallback callback) {
         getApi(httpSlot)
                 .doPostFullPath(fullUrl, parameters)
                 .compose(schedulerTransformer)
@@ -396,7 +395,7 @@ public final class HttpManager {
 
     //----------------------------------------download-----------------------------------------
 
-    public static void download(String url, String savePath, DownloadFileListener listener) {
+    public void download(String url, String savePath, DownloadFileListener listener) {
         DownloadInfo info = new DownloadInfo(url, savePath);
         info.setState(DownloadInfo.START);
         info.setListener(listener);
@@ -405,19 +404,19 @@ public final class HttpManager {
         downloadManager.startDown(info);
     }
 
-    public static void download(DownloadInfo info) {
+    public void download(DownloadInfo info) {
         DownloadManager downloadManager = DownloadManager.getInstance();
         downloadManager.startDown(info);
     }
 
     //----------------------------------------upload-------------------------------------------
-    public static void uploadFile(String url, String filePath, String fileDes, boolean isFullUrl,
-                                  final FileResponseResult callback) {
+    public void uploadFile(String url, String filePath, String fileDes, boolean isFullUrl,
+                           final FileResponseResult callback) {
         uploadFile(null, url, filePath, fileDes, isFullUrl, callback);
     }
 
-    public static void uploadFile(HttpSlot httpSlot, String url, String filePath, String fileDes, boolean isFullUrl,
-                                  final FileResponseResult callback) {
+    public void uploadFile(HttpSlot httpSlot, String url, String filePath, String fileDes, boolean isFullUrl,
+                           final FileResponseResult callback) {
         final File file = new File(filePath);
         if (!file.exists()) {
             return;
@@ -437,13 +436,13 @@ public final class HttpManager {
         }
     }
 
-    public static void uploadFiles(String url, List<String> filePathList, boolean isFullUrl,
-                                   final FileResponseResult callback) {
+    public void uploadFiles(String url, List<String> filePathList, boolean isFullUrl,
+                            final FileResponseResult callback) {
         uploadFiles(null, url, filePathList, isFullUrl, callback);
     }
 
-    public static void uploadFiles(HttpSlot httpSlot, String url, List<String> filePathList, boolean isFullUrl,
-                                   final FileResponseResult callback) {
+    public void uploadFiles(HttpSlot httpSlot, String url, List<String> filePathList, boolean isFullUrl,
+                            final FileResponseResult callback) {
         if (filePathList == null || filePathList.size() == 0) {
             return;
         }
@@ -478,7 +477,7 @@ public final class HttpManager {
     }
 
 
-    private static Observable.Transformer schedulerTransformer = new Observable.Transformer() {
+    private Observable.Transformer schedulerTransformer = new Observable.Transformer() {
         @Override
         public Object call(Object o) {
             return ((Observable) o)
