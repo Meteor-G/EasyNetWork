@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import com.meteor.easynetwork.bean.UserForLogin;
 import com.meteor.network.HttpManager;
+import com.meteor.network.HttpSlot;
 import com.meteor.network.callback.FileResponseResult;
 import com.meteor.network.callback.HttpCallback;
 
@@ -19,10 +20,29 @@ import retrofit2.http.Url;
  */
 public class API {
 
+    private static HttpSlot getHttpSlot() {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("params1111", "123");
+        params.put("params21111", "123456");
+        HashMap<String, String> header = new HashMap<>();
+        header.put("header11111", "headerrrrr");
+        header.put("header21111", "headerrrrr1");
+        return new HttpSlot.Builder()
+//                .setBaseUrl("https://www.wanandroid.com")
+                .setBaseUrl("http://192.168.0.120:8080")
+                .setReadTimeOut(10 * 1000)
+                .setWriteTimeOut(10 * 1000)
+                .setConnectTimeout(10 * 1000)
+                .addCommonParams(params)
+                .addCommonHeaders(header)
+                .build();
+
+    }
+
     public static void testGet(HttpCallback callback) {
         HashMap<String, String> headers = new HashMap<>();
         headers.put("aaa", "adafd");
-        HttpManager.getInstance().get(UrlConfig.USER_INFO, null, callback);
+        HttpManager.getInstance().get(getHttpSlot(), UrlConfig.USER_INFO, null, callback);
     }
 
     public static void testPost(String name, String password, HttpCallback callback) {
@@ -42,27 +62,5 @@ public class API {
 
     public static void testMultipleFileUpload(String url, List<String> filePathList, FileResponseResult fileResponseResult) {
         HttpManager.getInstance().uploadFiles(url, filePathList, true, fileResponseResult);
-    }
-
-    /**
-     * 获取电影列表
-     *
-     * @param start
-     * @param count
-     * @param city
-     * @param callback
-     */
-    public static void getMovieList(int start, int count, String city, HttpCallback callback) {
-        Map<String, Object> parameters = new HashMap<>();
-        if (start > 0) {
-            parameters.put("start", start);
-        }
-        if (count > 0) {
-            parameters.put("count", count);
-        }
-        if (!TextUtils.isEmpty(city)) {
-            parameters.put("city", city);
-        }
-        HttpManager.getInstance().getFullPath(UrlConfig.DOUBAN_MOVIE_IN_THEATERS, parameters, callback);
     }
 }

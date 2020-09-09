@@ -1,6 +1,8 @@
 package com.meteor.network.interceptor;
 
 
+import android.util.Log;
+
 import com.meteor.network.HttpManager;
 
 import java.io.IOException;
@@ -31,6 +33,7 @@ public class HeaderInterceptor implements Interceptor {
         for (String key : headers.keySet()) {
             builder.addHeader(key, headers.get(key));
         }
+
         Request request = builder.build();
         return chain.proceed(request);
     }

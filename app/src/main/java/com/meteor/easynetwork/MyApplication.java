@@ -7,6 +7,7 @@ import android.util.Log;
 import com.meteor.network.HttpManager;
 import com.meteor.network.HttpSlot;
 
+import java.io.InputStream;
 import java.util.HashMap;
 
 /**
@@ -22,21 +23,20 @@ public class MyApplication extends Application {
         super.onCreate();
         mContext = this;
         HashMap<String, String> params = new HashMap<>();
-        params.put("123", "123");
-        params.put("123456", "123456");
+        params.put("params", "123");
+        params.put("params2", "123456");
         HashMap<String, String> header = new HashMap<>();
-        header.put("header1", "123");
-        header.put("header2", "123456");
+        header.put("header1", "headerrrrr");
+        header.put("header2", "headerrrrr1");
         HttpSlot httpSlot = new HttpSlot.Builder()
 //                .setBaseUrl("https://www.wanandroid.com")
-                .setBaseUrl("http://192.168.18.7:8080")
+                .setBaseUrl("http://192.168.0.120:8080")
                 .setReadTimeOut(10 * 1000)
                 .setWriteTimeOut(10 * 1000)
                 .setConnectTimeout(10 * 1000)
                 .addCommonParams(params)
                 .addCommonHeaders(header)
                 .build();
-        Log.e("gll", httpSlot.toString());
         HttpManager.init(this, httpSlot);
     }
 

@@ -68,7 +68,7 @@ public class CommonResultSubscriber<T extends ResponseBody> extends Subscriber<T
     @Override
     public void onStart() {
         super.onStart();
-        if (!NetworkUtils.isNetworkConnected(HttpManager.getContext())) {
+        if (!NetworkUtils.isNetworkConnected(HttpManager.getInstance().getContext())) {
             onException(NETWORK_ERROR, "网络连接失败");
         }
     }
@@ -83,19 +83,19 @@ public class CommonResultSubscriber<T extends ResponseBody> extends Subscriber<T
         e.printStackTrace();
         if (e instanceof HttpException) {
             //   HTTP错误
-            onException(BAD_NETWORK, "");
+            onException(BAD_NETWORK, e.getMessage());
         } else if (e instanceof ConnectException
                 || e instanceof UnknownHostException) {
             //   连接错误
-            onException(CONNECT_ERROR, "");
+            onException(CONNECT_ERROR, e.getMessage());
         } else if (e instanceof InterruptedIOException) {
             //  连接超时
-            onException(CONNECT_TIMEOUT, "");
+            onException(CONNECT_TIMEOUT, e.getMessage());
         } else if (e instanceof JsonParseException
                 || e instanceof JSONException
                 || e instanceof ParseException) {
             //  解析错误
-            onException(PARSE_ERROR, "");
+            onException(PARSE_ERROR, e.getMessage());
             e.printStackTrace();
         } else {
             if (e != null) {
@@ -146,16 +146,16 @@ public class CommonResultSubscriber<T extends ResponseBody> extends Subscriber<T
     private void onException(int unknownError, String message) {
         switch (unknownError) {
             case CONNECT_ERROR:
-                httpCallback.onFailed(unknownError, "连接错误");
+                httpCallback.onFailed(unknownError, "连接错误" + message);
                 break;
             case CONNECT_TIMEOUT:
-                httpCallback.onFailed(unknownError, "连接超时");
+                httpCallback.onFailed(unknownError, "连接超时" + message);
                 break;
             case BAD_NETWORK:
-                httpCallback.onFailed(unknownError, "网络超时");
+                httpCallback.onFailed(unknownError, "网络超时" + message);
                 break;
             case PARSE_ERROR:
-                httpCallback.onFailed(unknownError, "数据解析失败");
+                httpCallback.onFailed(unknownError, "数据解析失败" + message);
                 break;
             //非true的所有情况
             case NOT_TRUE_OVER:

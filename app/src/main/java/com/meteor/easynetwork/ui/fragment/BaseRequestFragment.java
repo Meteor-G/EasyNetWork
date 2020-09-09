@@ -69,11 +69,15 @@ public class BaseRequestFragment extends Fragment implements View.OnClickListene
         tvBaseRequestPost = (TextView) rootView.findViewById(R.id.tv_base_request_post);
         btnBaseRequestPostBody = (Button) rootView.findViewById(R.id.btn_base_request_post_body);
         btnBaseRequestPostBody.setOnClickListener(BaseRequestFragment.this);
+        rootView.findViewById(R.id.btn_base_request_https).setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.btn_base_request_https:
+                testHttps();
+                break;
             case R.id.btn_base_request_get:
                 testGet();
                 break;
@@ -84,6 +88,20 @@ public class BaseRequestFragment extends Fragment implements View.OnClickListene
                 testPostByMapByBody();
                 break;
         }
+    }
+
+    private void testHttps() {
+//        API.testHttps(new HttpCallback() {
+//            @Override
+//            public void onResolve(Object data) {
+//                Log.e(TAG, "testHttps:" + data.toString());
+//            }
+//
+//            @Override
+//            public void onFailed(int errCode, String msg) {
+//                Log.e(TAG, "testHttps:" + msg);
+//            }
+//        });
     }
 
     /**
@@ -126,19 +144,19 @@ public class BaseRequestFragment extends Fragment implements View.OnClickListene
         String name = etBaseRequestPostName.getText().toString().trim();
         String password = etBaseRequestPostPassword.getText().toString().trim();
         //解析json
-        API.testPost(name, password, new HttpCallback<ServerCallbackModel<String>>() {
-
-
-            @Override
-            public void onResolve(ServerCallbackModel<String> data) {
-                showToast("accessToken:" + data.getData());
-            }
-
-            @Override
-            public void onFailed(int errCode, String msg) {
-                Log.e("gllGet", errCode + msg);
-            }
-        });
+//        API.testPost(name, password, new HttpCallback<ServerCallbackModel<String>>() {
+//
+//
+//            @Override
+//            public void onResolve(ServerCallbackModel<String> data) {
+//                showToast("accessToken:" + data.getData());
+//            }
+//
+//            @Override
+//            public void onFailed(int errCode, String msg) {
+//                Log.e("gllGet", errCode + msg);
+//            }
+//        });
         //不解析json
         API.testPost(name, password, new CommonCallback<String>() {
 
@@ -159,27 +177,27 @@ public class BaseRequestFragment extends Fragment implements View.OnClickListene
         String password = etBaseRequestPostPassword.getText().toString().trim();
         UserForLogin userForLogin = new UserForLogin(name, password);
         //解析json
-        API.testPost(userForLogin, new HttpCallback<ServerCallbackModel<String>>() {
-
-//            @Override
-//            public void onResolve(BaseBean<List<WanBean>> data) {
-//                List<WanBean> wanBeans = data.getData();
-//                for (WanBean wanBean : wanBeans) {
-//                    Log.e("gllGet", wanBean.toString());
-//                }
+//        API.testPost(userForLogin, new HttpCallback<ServerCallbackModel<String>>() {
 //
+////            @Override
+////            public void onResolve(BaseBean<List<WanBean>> data) {
+////                List<WanBean> wanBeans = data.getData();
+////                for (WanBean wanBean : wanBeans) {
+////                    Log.e("gllGet", wanBean.toString());
+////                }
+////
+////            }
+//
+//            @Override
+//            public void onResolve(ServerCallbackModel<String> data) {
+//                showToast("accessToken:" + data.getData());
 //            }
-
-            @Override
-            public void onResolve(ServerCallbackModel<String> data) {
-                showToast("accessToken:" + data.getData());
-            }
-
-            @Override
-            public void onFailed(int errCode, String msg) {
-                Log.e("gllGet", errCode + msg);
-            }
-        });
+//
+//            @Override
+//            public void onFailed(int errCode, String msg) {
+//                Log.e("gllGet", errCode + msg);
+//            }
+//        });
         //不解析json
         API.testPost(userForLogin, new CommonCallback<String>() {
 

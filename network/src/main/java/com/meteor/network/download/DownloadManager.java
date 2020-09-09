@@ -69,7 +69,7 @@ public class DownloadManager {
             OkHttpClient.Builder builder = new OkHttpClient.Builder();
             builder.connectTimeout(60, TimeUnit.SECONDS);
             builder.addInterceptor(interceptor);
-            Retrofit.Builder newBuilder = HttpManager.getRetrofitBuilder();
+            Retrofit.Builder newBuilder = HttpManager.getInstance().getRetrofitBuilder();
             newBuilder.client(builder.build());
             commonRequest = newBuilder.build().create(CommonRequest.class);
             info.setRequest(commonRequest);
@@ -158,8 +158,13 @@ public class DownloadManager {
     }
 
     public void pauseAll() {
-        for (DownloadInfo info : downloadInfos) {
-            pause(info);
+        try {
+            Iterator<DownloadInfo> it_b = downloadInfos.iterator();
+            while (it_b.hasNext()) {
+                pause(it_b.next());
+            }
+        } catch (Exception e) {
+
         }
     }
 

@@ -126,5 +126,20 @@
             android:textColor="#ffffffff"
             android:textSize="18dp" />
 
+
+        <Button
+            android:id="@+id/btn_base_request_https"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@color/colorPrimary"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="请求https"
+            android:textAllCaps="false"
+            android:textColor="#ffffffff"
+            android:textSize="18dp" />
     </LinearLayout>
 </ScrollView>
