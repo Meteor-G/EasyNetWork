@@ -56,6 +56,7 @@ public final class HttpManager {
     private Retrofit.Builder retrofitBuilder;                         //Retrofit请求Builder
     private volatile static HttpManager singleton = null;
     private CommonRequest mDefultCommonRequest;
+    private static boolean allowWifiProxy;                                   //是否支持代理
 
     private HttpManager() {
         okHttpClientBuilder = new OkHttpClient.Builder();
@@ -67,9 +68,14 @@ public final class HttpManager {
     }
 
     public static void init(Context context, HttpSlot httpSlot) {
+        init(context, httpSlot, true);
+    }
+
+    public static void init(Context context, HttpSlot httpSlot, boolean isAllowWifiProxy) {
         Utils.checkNotNull(context, "mContext == null");
         Utils.checkNotNull(httpSlot, "httpSlot == null");
         HttpManager.mContext = context;
+        HttpManager.allowWifiProxy = isAllowWifiProxy;
         getInstance().setDefultClient(httpSlot);
     }
 
@@ -97,6 +103,9 @@ public final class HttpManager {
         return singleton;
     }
 
+    public boolean isAllowWifiProxy() {
+        return allowWifiProxy;
+    }
 
     private void setDefultClient(HttpSlot httpSlot) {
         okHttpClientBuilder = generateOkClient(httpSlot);

@@ -53,6 +53,10 @@ public class CommonResultSubscriber<T extends ResponseBody> extends Subscriber<T
      * 非 true的所有情况
      */
     private static final int NOT_TRUE_OVER = 1004;
+    /**
+     * 拒绝wifi代理
+     */
+    private static final int DENIED_WIFI_PROXY = 1005;
 
     private HttpCallback httpCallback;
 
@@ -71,6 +75,10 @@ public class CommonResultSubscriber<T extends ResponseBody> extends Subscriber<T
         if (!NetworkUtils.isNetworkConnected(HttpManager.getInstance().getContext())) {
             onException(NETWORK_ERROR, "网络连接失败");
         }
+        if (!HttpManager.getInstance().isAllowWifiProxy()) {
+            onException(DENIED_WIFI_PROXY, "代理拒绝入网");
+        }
+        unsubscribe();
     }
 
     @Override

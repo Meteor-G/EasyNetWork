@@ -14,7 +14,7 @@ import rx.functions.Action1;
  * @data: 2020-08-08 13:21
  * @description
  */
-public class DownloadSubscriber <T> extends Subscriber<T> implements TransformProgressListener {
+public class DownloadSubscriber<T> extends Subscriber<T> implements TransformProgressListener {
 
     private DownloadFileListener downloadListener;
     private DownloadInfo downloadInfo;
